@@ -1,8 +1,7 @@
 import jwt
-from django.conf import settings
 from rest_framework.authentication import BaseAuthentication
 from rest_framework import exceptions
-from .models import User
+from django.conf import settings
 
 class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
@@ -13,11 +12,22 @@ class JWTAuthentication(BaseAuthentication):
         try:
             token = auth_header.split(' ')[1]
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-            user = User.objects.get(id=payload['user_id'])
+            
+            user_data = {
+                'id': payload['user_id'],
+                'username': payload.get('username'),
+                'email': payload.get('email'),
+                'is_staff': payload.get('is_staff', False),
+                'is_superuser': payload.get('is_superuser', False),
+                'permissions': payload.get('permissions', []),
+                'is_authenticated': True
+            }
+            
+            user = type('User', (), user_data)()
             return (user, token)
         except jwt.ExpiredSignatureError:
             raise exceptions.AuthenticationFailed('Token expirado')
         except jwt.DecodeError:
             raise exceptions.AuthenticationFailed('Token inválido')
-        except User.DoesNotExist:
-            raise exceptions.AuthenticationFailed('Usuario no encontrado')
+        except Exception as e:
+            raise exceptions.AuthenticationFailed('Error de autenticación')

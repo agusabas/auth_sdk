@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='auth_sdk',
-    version='0.3',
+    version='0.5',
     packages=find_packages(),
     install_requires=[
         'Django>=4.2',
