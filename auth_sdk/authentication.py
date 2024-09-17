@@ -6,6 +6,7 @@ import json
 from rest_framework.authentication import BaseAuthentication
 from rest_framework import exceptions
 from django.conf import settings
+from .models import User
 
 # Configuración de Redis
 redis_client = redis.Redis(host='redis', port=6379, db=0)
@@ -45,10 +46,10 @@ class JWTAuthentication(BaseAuthentication):
                 # Almacenar en caché
                 redis_client.setex(token, CACHE_EXPIRATION, json.dumps(user_data))
                 
-                user = type('User', (), user_data)()
+                user = User(user_data)
                 return (user, token)
             else:
-                raise exceptions.AuthenticationFailed('Respuesta inválida del servicio de autenticación')
+                raise exceptions.AuthenticationFailed('Respuesta inválida del servicio de autenticación')   
         
         except Timeout:
             raise exceptions.AuthenticationFailed('Tiempo de espera agotado al contactar el servicio de autenticación')
