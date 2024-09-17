@@ -1,9 +1,13 @@
 from rest_framework.permissions import BasePermission
 from .models import AnonymousUser
 
+class AllowAny(BasePermission):
+    def has_permission(self, request, view):
+        return True
+
 class IsAuthenticated(BasePermission):
     def has_permission(self, request, view):
-        return bool(request.user and request.user.is_authenticated)
+        return not isinstance(request.user, AnonymousUser) and request.user.is_authenticated
 
 def user_has_perm(request, perm):
     if isinstance(request.user, AnonymousUser):
