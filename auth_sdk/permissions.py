@@ -8,8 +8,8 @@ def user_has_perm(request, perm):
     return perm in getattr(request.user, 'permissions', [])
 
 class HasPermission(BasePermission):
-    def __init__(self, perm):
-        self.perm = perm
+    def __init__(self, *perms):
+        self.perms = perms
 
     def has_permission(self, request, view):
-        return user_has_perm(request, self.perm)
+        return any(user_has_perm(request, perm) for perm in self.perms)
