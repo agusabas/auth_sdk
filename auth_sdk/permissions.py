@@ -18,5 +18,8 @@ class HasPermission(BasePermission):
     def __init__(self, *perms):
         self.perms = perms
 
+    def __call__(self):
+        return self
+
     def has_permission(self, request, view):
         return any(user_has_perm(request, perm) for perm in self.perms)
