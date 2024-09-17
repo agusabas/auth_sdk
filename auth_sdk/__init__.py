@@ -1,3 +1,3 @@
-from .models import *
-from .authentication import *
+from .models import User
+from .authentication import JWTAuthentication
 from .permissions import *

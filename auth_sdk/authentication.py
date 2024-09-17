@@ -28,7 +28,7 @@ class JWTAuthentication(BaseAuthentication):
         cached_user = redis_client.get(token)
         if cached_user:
             user_data = json.loads(cached_user)
-            user = type('User', (), user_data)()
+            user = User(user_data)  # Recrear el objeto User con los datos de la caché
             return (user, token)
 
         # Si no está en caché, obtener del microservicio de autenticación
@@ -49,7 +49,7 @@ class JWTAuthentication(BaseAuthentication):
                 user = User(user_data)
                 return (user, token)
             else:
-                raise exceptions.AuthenticationFailed('Respuesta inválida del servicio de autenticación')   
+                raise exceptions.AuthenticationFailed('Respuesta inválida del servicio de autenticación')
         
         except Timeout:
             raise exceptions.AuthenticationFailed('Tiempo de espera agotado al contactar el servicio de autenticación')
