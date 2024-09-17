@@ -6,7 +6,7 @@ import json
 from rest_framework.authentication import BaseAuthentication
 from rest_framework import exceptions
 from django.conf import settings
-from .models import User
+from .models import User, AnonymousUser
 
 # Configuración de Redis
 redis_client = redis.Redis(host='redis', port=6379, db=0)
@@ -20,7 +20,7 @@ class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
         auth_header = request.META.get('HTTP_AUTHORIZATION')
         if not auth_header or not auth_header.startswith('JWT '):
-            return None
+            return (AnonymousUser(), None)
 
         token = auth_header.split(' ')[1]
 

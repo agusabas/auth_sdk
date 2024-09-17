@@ -1,3 +1,25 @@
+class AnonymousUser:
+    id = None
+    username = ''
+    is_authenticated = False
+
+    def __str__(self):
+        return 'AnonymousUser'
+
+    def to_dict(self):
+        return {
+            'id': None,
+            'username': '',
+            'mayorista': 'N',
+            'canal': 'MINOR',
+            'provincia': '',
+            'localidad': '',
+            'varios': '',
+            'zona': '',
+            'role': '',
+            'is_authenticated': False
+        }
+
 class User:
     def __init__(self, user_data):
         for key, value in user_data.items():
