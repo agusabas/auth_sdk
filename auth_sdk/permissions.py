@@ -12,7 +12,7 @@ class IsAuthenticated(BasePermission):
 def user_has_perm(request, perm):
     if isinstance(request.user, AnonymousUser):
         return False
-    return perm in getattr(request.user, 'permissions', [])
+    return perm in getattr(request.user, 'user_permissions', [])
 
 class HasPermission(BasePermission):
     def __init__(self, *perms):
