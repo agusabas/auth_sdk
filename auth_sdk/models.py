@@ -43,6 +43,9 @@ class User:
             'sucursal': getattr(self, 'sucursal', None),
             'is_authenticated': getattr(self, 'is_authenticated', False)
         }
+    
+    def is_admin(self):
+        return getattr(self, 'role', '').lower() == 'admin'
 
     def __str__(self):
         return f"User: {self.username}"

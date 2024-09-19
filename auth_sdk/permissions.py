@@ -23,3 +23,7 @@ class HasPermission(BasePermission):
 
     def has_permission(self, request, view):
         return any(user_has_perm(request, perm) for perm in self.perms)
+    
+class IsAdminUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.is_admin()
