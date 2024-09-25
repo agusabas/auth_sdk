@@ -57,3 +57,46 @@ class JWTAuthentication(BaseAuthentication):
             raise exceptions.AuthenticationFailed(f'Error al contactar el servicio de autenticación: {str(e)}')
         except Exception as e:
             raise exceptions.AuthenticationFailed(f'Error de autenticación: {str(e)}')
+        
+class AuthSDK:
+    @staticmethod
+    def get_user_details(user_id=None, token=None):
+        if not token:
+            raise ValueError("Se requiere un token de autenticación")
+
+        # Crear una clave única para el caché
+        cache_key = f"user_details:{token}:{user_id}" if user_id else f"user_details:{token}"
+
+        # Intentar obtener los datos del usuario de la caché
+        cached_user = redis_client.get(cache_key)
+        if cached_user:
+            user_data = json.loads(cached_user)
+            return User(user_data)
+
+        headers = {'Authorization': f'JWT {token}'}
+        params = {}
+        if user_id:
+            params['user_id'] = user_id
+
+        try:
+            response = requests.get(AUTH_SERVICE_URL, headers=headers, params=params, timeout=10)
+            response.raise_for_status()
+            response_data = response.json()
+            
+            if response_data.get('success') and 'results' in response_data:
+                user_data = response_data['results']
+                user_data['is_authenticated'] = True
+                
+                # Almacenar en caché
+                redis_client.setex(cache_key, CACHE_EXPIRATION, json.dumps(user_data))
+                
+                return User(user_data)
+            else:
+                raise exceptions.AuthenticationFailed('Respuesta inválida del servicio de autenticación')
+        
+        except Timeout:
+            raise exceptions.AuthenticationFailed('Tiempo de espera agotado al contactar el servicio de autenticación')
+        except RequestException as e:
+            raise exceptions.AuthenticationFailed(f'Error al contactar el servicio de autenticación: {str(e)}')
+        except Exception as e:
+            raise exceptions.AuthenticationFailed(f'Error de autenticación: {str(e)}')
