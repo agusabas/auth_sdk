@@ -24,6 +24,7 @@ class User:
     def __init__(self, user_data):
         for key, value in user_data.items():
             setattr(self, key, value)
+        self.user_permissions = user_data.get('user_permissions', [])
 
     def to_dict(self):
         return {
@@ -46,6 +47,9 @@ class User:
     
     def is_admin(self):
         return getattr(self, 'role', '').lower() == 'admin'
+
+    def has_permission(self, perm):
+        return perm in self.user_permissions
 
     def __str__(self):
         return f"User: {self.username}"
