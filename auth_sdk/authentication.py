@@ -92,7 +92,7 @@ class JWTAuthentication(BaseAuthentication):
             response = requests.get(
                 url, 
                 headers=headers, 
-                timeout=AuthConfig.AUTH_SERVICE_TIMEOUT
+                timeout=AuthConfig.SERVICE_TIMEOUT
             )
             response.raise_for_status()
             
@@ -173,7 +173,7 @@ class AuthSDK:
                 url, 
                 headers=headers, 
                 params=params,
-                timeout=AuthConfig.AUTH_SERVICE_TIMEOUT
+                timeout=AuthConfig.SERVICE_TIMEOUT
             )
             response.raise_for_status()
             

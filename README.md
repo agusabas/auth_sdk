@@ -21,4 +21,4 @@ Integre este SDK en sus microservicios Django para manejar la autenticación y l
 
 ## Configuración
 
-Asegúrese de configurar las variables de entorno necesarias, como `AUTH_SERVICE_HOST`, y tener una instancia de Redis accesible para el caché de usuarios.
+Asegúrese de configurar las variables de entorno necesarias, como `AUTH_SDK_SERVICE_HOST`, y tener una instancia de Redis accesible para el caché de usuarios.

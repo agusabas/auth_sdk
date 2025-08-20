@@ -20,10 +20,10 @@ class AuthConfig:
     CACHE_PREFIX = os.environ.get('AUTH_SDK_CACHE_PREFIX', 'auth_sdk')
     
     # Authentication Service Configuration
-    AUTH_SERVICE_HOST = os.environ.get('AUTH_SDK_SERVICE_HOST', 'localhost:8000')
-    AUTH_SERVICE_SCHEME = os.environ.get('AUTH_SDK_SERVICE_SCHEME', 'http')
-    AUTH_SERVICE_ENDPOINT = os.environ.get('AUTH_SDK_SERVICE_ENDPOINT', '/api/user/get_details/')
-    AUTH_SERVICE_TIMEOUT = int(os.environ.get('AUTH_SDK_SERVICE_TIMEOUT', 10))
+    SERVICE_HOST = os.environ.get('AUTH_SDK_SERVICE_HOST', 'localhost:8000')
+    SERVICE_SCHEME = os.environ.get('AUTH_SDK_SERVICE_SCHEME', 'http')
+    SERVICE_ENDPOINT = os.environ.get('AUTH_SDK_SERVICE_ENDPOINT', '/api/user/get_details/')
+    SERVICE_TIMEOUT = int(os.environ.get('AUTH_SDK_SERVICE_TIMEOUT', 10))
     
     # JWT Configuration
     JWT_HEADER_PREFIX = os.environ.get('AUTH_SDK_JWT_HEADER_PREFIX', 'JWT')
@@ -38,7 +38,7 @@ class AuthConfig:
     @classmethod
     def get_auth_service_url(cls):
         """Get the complete authentication service URL."""
-        return f"{cls.AUTH_SERVICE_SCHEME}://{cls.AUTH_SERVICE_HOST}{cls.AUTH_SERVICE_ENDPOINT}"
+        return f"{cls.SERVICE_SCHEME}://{cls.SERVICE_HOST}{cls.SERVICE_ENDPOINT}"
     
     @classmethod
     def get_redis_config(cls):
