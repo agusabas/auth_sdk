@@ -48,7 +48,12 @@ class CacheManager:
         try:
             full_key = f"{AuthConfig.CACHE_PREFIX}:{key}"
             value = self._redis_client.get(full_key)
-            return value.decode('utf-8') if value else None
+            if value is None:
+                return None
+            # Handle both bytes and string responses
+            if isinstance(value, bytes):
+                return value.decode('utf-8')
+            return str(value)
         except Exception as e:
             logger.warning(f"Cache get failed for key {key}: {e}")
             return None
