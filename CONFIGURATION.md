@@ -55,6 +55,23 @@ All configuration is done through environment variables. See `.env.example` for 
 
 ## Django Settings Integration
 
+**IMPORTANT for Cache Compatibility**: If you use django-redis, ensure `DECODE_RESPONSES=False` in your Redis cache configuration:
+
+```python
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'CHARSET': 'utf-8',
+            'DECODE_RESPONSES': False,  # Required for auth_sdk compatibility
+            'IGNORE_EXCEPTIONS': True,
+        }
+    }
+}
+```
+
 Add this to your Django settings to configure logging:
 
 ```python
@@ -86,6 +103,7 @@ LOGGING = {
 3. **Timeouts**: Adjust `AUTH_SDK_SERVICE_TIMEOUT` based on your network latency
 4. **Logging**: Set `AUTH_SDK_LOG_LEVEL=ERROR` in production to reduce log noise
 5. **Security**: Use Redis password and SSL in production environments
+6. **Cache Configuration**: Ensure `DECODE_RESPONSES=False` in Django Redis settings for proper cache compatibility
 
 ## Implementation Guide
 

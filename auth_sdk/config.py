@@ -47,7 +47,7 @@ class AuthConfig:
             'host': cls.REDIS_HOST,
             'port': cls.REDIS_PORT,
             'db': cls.REDIS_DB,
-            'decode_responses': True,
+            'decode_responses': False,  # Fixed: auth_sdk handles decode manually
             'socket_connect_timeout': 5,
             'socket_timeout': 5,
         }
